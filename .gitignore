@@ -3,3 +3,12 @@
 /.settings
 /.gradle
 eclipse
+/eclipse
+/logs
+/mods
+/resourcepacks
+/saves
+/.classpath
+/.project
+/config
+/crash-reports

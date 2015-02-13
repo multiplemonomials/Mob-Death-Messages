@@ -2,7 +2,7 @@ package net.multiplemonomials.mobdeathmessages.network.message;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
-import net.multiplemonomials.mobdeathmessages.data.EERExtendedPlayer;
+import net.multiplemonomials.mobdeathmessages.data.MDMPlayerData;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -15,15 +15,15 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Message that sets the given EEREExtebdedPlayer as the player data for the client it's sent to
  *
  */
-public class MessageEERExtendedPlayerUpdateClient implements IMessage, IMessageHandler<MessageEERExtendedPlayerUpdateClient, IMessage>
+public class MessageMBMPlayerDataUpdateClient implements IMessage, IMessageHandler<MessageMBMPlayerDataUpdateClient, IMessage>
 {
 	NBTTagCompound _playerDataCompound;
 	
-    public MessageEERExtendedPlayerUpdateClient()
+    public MessageMBMPlayerDataUpdateClient()
     {
     }
 
-    public MessageEERExtendedPlayerUpdateClient(EERExtendedPlayer playerData)
+    public MessageMBMPlayerDataUpdateClient(MDMPlayerData playerData)
     {
     	_playerDataCompound = new NBTTagCompound();
         playerData.saveNBTData(_playerDataCompound);
@@ -43,9 +43,9 @@ public class MessageEERExtendedPlayerUpdateClient implements IMessage, IMessageH
 
     @SideOnly(Side.CLIENT)
     @Override
-    public IMessage onMessage(MessageEERExtendedPlayerUpdateClient message, MessageContext ctx)
+    public IMessage onMessage(MessageMBMPlayerDataUpdateClient message, MessageContext ctx)
     {
-    	EERExtendedPlayer.get(FMLClientHandler.instance().getClient().thePlayer).loadNBTData(message._playerDataCompound);
+    	MDMPlayerData.get(FMLClientHandler.instance().getClient().thePlayer).loadNBTData(message._playerDataCompound);
     	
     	return null;
     }

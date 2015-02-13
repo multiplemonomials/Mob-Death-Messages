@@ -8,11 +8,13 @@ import net.multiplemonomials.mobdeathmessages.util.LogHelper;
 
 public class ModConfiguration
 {
-	public static boolean showMobOnPlayerDeathMessages;
+	public static boolean showPlayerOnMobDeathMessages = true;
 	
-	public static boolean showMobOnMobDeathMessages;
+	public static boolean showMobOnMobDeathMessages = true;
 	
-	public static boolean showBatsBurningToDeath;
+	public static boolean showInanimateObjectOnMobDeathMessages = true;
+	
+	public static boolean showBatsBurningToDeath = true;
 	
     private static Configuration configuration;
 
