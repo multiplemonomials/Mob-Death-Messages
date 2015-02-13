@@ -22,7 +22,17 @@ public class EntityLivingDeathMessager
 			EntityDamageSource entitySource = (EntityDamageSource)damageSource;
 			if(entitySource.getEntity() instanceof EntityPlayer)
 			{
-				
+				if(!ModConfiguration.showPlayerOnMobDeathMessages)
+				{
+					return;
+				}
+			}
+			else
+			{
+				if(!ModConfiguration.showMobOnMobDeathMessages)
+				{
+					return;
+				}
 			}
 		}
 		else

@@ -1,16 +1,12 @@
 package net.multiplemonomials.mobdeathmessages.data;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
+import net.multiplemonomials.mobdeathmessages.chat.KillingSpree;
 import net.multiplemonomials.mobdeathmessages.network.PacketHandler;
 import net.multiplemonomials.mobdeathmessages.network.message.MessageMBMPlayerDataUpdateClient;
 import net.multiplemonomials.mobdeathmessages.network.message.MessageMBMPlayerDataUpdateServer;
@@ -30,42 +26,32 @@ public class MDMPlayerData implements IExtendedEntityProperties
 		return player;
 	}
 
-	public Set<ItemStack> learnedItems;
+    public int killScore;
+    public KillingSpree currentKillingSpree;
 	    
     public MDMPlayerData(EntityPlayer player)
     {
-	    this.player = player;	    
-	    learnedItems = new HashSet<ItemStack>();
+	    this.player = player;	
+	    killScore = 0;
     }
 
     public static final MDMPlayerData get(EntityPlayer player)
     {
-    	return (MDMPlayerData) player.getExtendedProperties(Names.Data.EEREXTENDEDPROPERTIES);
+    	return (MDMPlayerData) player.getExtendedProperties(Names.Data.MDMPLAYERDATA);
     }
     
     public static final void register(EntityPlayer player)
     {
-    	player.registerExtendedProperties(Names.Data.EEREXTENDEDPROPERTIES, new MDMPlayerData(player));
+    	player.registerExtendedProperties(Names.Data.MDMPLAYERDATA, new MDMPlayerData(player));
     }
 
 	@Override
 	public void saveNBTData(NBTTagCompound compound)
 	{
 		NBTTagCompound masterTag = new NBTTagCompound();
-		if(!learnedItems.isEmpty())
-	    {
-        	// Write the known items to NBT
-	        NBTTagList learnedItemList = new NBTTagList();
-	        
-	        for(ItemStack wrappedStack : learnedItems)
-	        {
-                NBTTagCompound tagCompound = new NBTTagCompound();
-                wrappedStack.writeToNBT(tagCompound);
-                learnedItemList.appendTag(tagCompound);
-	        }
-	        masterTag.setTag("learnedItems", learnedItemList);
-	    }
-		compound.setTag(Names.Data.EEREXTENDEDPROPERTIES, masterTag);
+		masterTag.setInteger("killScore", killScore);
+
+		compound.setTag(Names.Data.MDMPLAYERDATA, masterTag);
 	}
 
 	@Override
@@ -75,8 +61,9 @@ public class MDMPlayerData implements IExtendedEntityProperties
 		
 		if(compound != null)
 		{
-			//NBTTagCompound masterTag = (NBTTagCompound) compound.getTag(Names.Data.EEREXTENDEDPROPERTIES);
-			
+			NBTTagCompound masterTag = (NBTTagCompound) compound.getTag(Names.Data.MDMPLAYERDATA);
+			killScore = masterTag.getInteger("killScore");
+			currentKillingSpree = KillingSpree.getKillingSpreeLevel(killScore);
 		}
 	}
 
@@ -84,7 +71,7 @@ public class MDMPlayerData implements IExtendedEntityProperties
     private static final String getSaveKey(EntityPlayer player)
     {
     	// no longer a username field, so use the command sender name instead:
-    	return player.getCommandSenderName() + ":" + Names.Data.EEREXTENDEDPROPERTIES;
+    	return player.getCommandSenderName() + ":" + Names.Data.MDMPLAYERDATA;
     }
     
     public static final void loadProxyData(EntityPlayer player)

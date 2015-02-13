@@ -4,7 +4,7 @@ public class Names
 {
     public static class Data
     {
-    	public final static String EEREXTENDEDPROPERTIES = "EERExtendedPlayer";
+    	public final static String MDMPLAYERDATA = "EERExtendedPlayer";
     }
     
     public static class Blocks
