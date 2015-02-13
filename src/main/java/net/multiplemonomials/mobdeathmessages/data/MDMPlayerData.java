@@ -75,7 +75,7 @@ public class MDMPlayerData implements IExtendedEntityProperties
 		
 		if(compound != null)
 		{
-			NBTTagCompound masterTag = (NBTTagCompound) compound.getTag(Names.Data.EEREXTENDEDPROPERTIES);
+			//NBTTagCompound masterTag = (NBTTagCompound) compound.getTag(Names.Data.EEREXTENDEDPROPERTIES);
 			
 		}
 	}
