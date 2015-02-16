@@ -70,9 +70,11 @@ public class KillingSpreeMessager
 	private static void showPlayerKillingSpreeMessage(String entityName, KillingSpree newSpree)
 	{
 		StringBuilder message = new StringBuilder();
+		message.append("»§f");
 		message.append(entityName);
 		message.append(" is ");
 		message.append(newSpree._text);
+		message.append("!");
 		
 		FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(message.toString()));
 	}

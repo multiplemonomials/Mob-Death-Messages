@@ -5,10 +5,10 @@ import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
 public enum KillingSpree
 {
 	NONE("on a Boring Spree"),
-	KILLINGSPREE("on a Killing Spree"),
-	KILLINGMACHINE("a Killing Machine"),
-	LEGENDARY("Legendary"),
-	AWESOME("Awesome");
+	KILLINGSPREE("on a §4Killing Spree"),
+	KILLINGMACHINE("a §6Killing Machine"),
+	LEGENDARY("§bLegendary"),
+	AWESOME("§eAwesome");
 	
 	public final String _text;
 	
@@ -19,19 +19,19 @@ public enum KillingSpree
 	
 	public static KillingSpree getKillingSpreeLevel(int numberOfKills)
 	{
-		if(numberOfKills > ModConfiguration.killsForAwesome)
+		if(numberOfKills >= ModConfiguration.killsForAwesome)
 		{
 			return AWESOME;
 		}
-		else if(numberOfKills > ModConfiguration.killsForLegendary)
+		else if(numberOfKills >= ModConfiguration.killsForLegendary)
 		{
 			return LEGENDARY;
 		}
-		else if(numberOfKills > ModConfiguration.killsForKillingMachine)
+		else if(numberOfKills >= ModConfiguration.killsForKillingMachine)
 		{
 			return KILLINGMACHINE;
 		}
-		else if(numberOfKills > ModConfiguration.killsForKillingSpree)
+		else if(numberOfKills >= ModConfiguration.killsForKillingSpree)
 		{
 			return KILLINGSPREE;
 		}

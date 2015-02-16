@@ -45,7 +45,7 @@ public class ModConfiguration
     	showBatsBurningToDeath = configuration.get(CATEGORY_DEATH_MESSAGES, "showBatsBurningToDeath", false, "Show cases where a mob was killed by a player").getBoolean();
 
     	
-    	killingSpreePlayersEnabled = configuration.get(CATEGORY_DEATH_MESSAGES, "killingSpreePlayersEnabled", true, "Show player killing sprees").getBoolean();
+    	killingSpreePlayersEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreePlayersEnabled", true, "Show player killing sprees").getBoolean();
     	killsForKillingSpree = configuration.get(CATEGORY_KILLING_SPREES, "killsPerBaseKillingSpree", 8, "Kills to get a level one killing spree.  Subsequent levels take twice as many per level.").getInt();
     	
     	//initialize the rest of the values using math
