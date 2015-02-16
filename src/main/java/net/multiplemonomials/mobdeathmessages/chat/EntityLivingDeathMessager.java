@@ -7,6 +7,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.IChatComponent;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
+import net.multiplemonomials.mobdeathmessages.util.NameUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class EntityLivingDeathMessager 
@@ -49,8 +50,7 @@ public class EntityLivingDeathMessager
 		String messageText = deathMessage.getUnformattedText();
 		
 		//try to fix entities that aren't named properly in the death message
-		messageText.replaceAll("entity.", "");
-		messageText.replaceAll(".name", "");
+		messageText = NameUtils.trimEntityNamesInString(messageText);
 
 		
 		FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(messageText));
