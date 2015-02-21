@@ -33,6 +33,7 @@ public class MDMPlayerData implements IExtendedEntityProperties
     {
 	    this.player = player;	
 	    killScore = 0;
+	    currentKillingSpree = KillingSpree.NONE;
     }
 
     public static final MDMPlayerData get(EntityPlayer player)

@@ -16,4 +16,21 @@ public class NameUtils
 		newText = newText.replaceAll(".name", "");
 		return newText;
 	}
+	
+	public static String makeMobNamePlural(String name)
+	{
+		switch(name)
+		{
+		case "Squid":
+			return "Squid";
+		case "Cassowary":
+			return "Cassowaries";
+		case "Rubber Ducky":
+			return "Rubber Duckies";
+		case "Silverfish":
+			return "Silverfish";
+		default:
+			return name + "s";
+		}
+	}
 }

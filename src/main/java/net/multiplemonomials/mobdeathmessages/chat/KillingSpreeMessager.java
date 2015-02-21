@@ -6,7 +6,9 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
 import net.multiplemonomials.mobdeathmessages.data.MDMPlayerData;
+import net.multiplemonomials.mobdeathmessages.reference.Names;
 import net.multiplemonomials.mobdeathmessages.util.NameUtils;
 import cpw.mods.fml.common.FMLCommonHandler;
 
@@ -30,7 +32,8 @@ public class KillingSpreeMessager
 		{
 			//reset dying spree
 			data.killScore = 0;
-		}
+		}		
+		
 		++data.killScore;
 		
 		KillingSpree newSpree = KillingSpree.getKillingSpreeLevel(data.killScore);
@@ -76,10 +79,47 @@ public class KillingSpreeMessager
 			if(newSpree.ordinal() > previousSpree.ordinal())
 			{
 	
-				String friendlyPluralMobName = NameUtils.makePlural(NameUtils.trimEntityNamesInString(attackingEntity.getCommandSenderName()));
+				String friendlyPluralMobName = NameUtils.makeMobNamePlural(NameUtils.trimEntityNamesInString(attackingEntity.getCommandSenderName()));
 				showKillingSpreeMessage(friendlyPluralMobName, true, newSpree);
 			}
 			
+		}
+		
+		mobScores.put(entityName, killScore);
+	}
+	
+	/**
+	 * handle killing sprees when a mob dies
+	 * @param attackingEntity the mob that died
+	 */
+	public static void handleMobDeath(EntityLiving deadEntity)
+	{
+		// I think this is preferred to getCommandSenderName() because it is unaffected by language files.
+		String entityName = EntityList.getEntityString(deadEntity);
+		
+		int killScore = 0;
+		
+		if(mobScores.containsKey(entityName))
+		{
+			killScore = mobScores.get(entityName);
+		}
+		if(killScore > 0)
+		{
+			//reset killing spree
+			killScore = 0;
+		}
+		--killScore;
+		
+		KillingSpree previousSpree = KillingSpree.getKillingSpreeLevel(killScore + 1);
+		KillingSpree newSpree = KillingSpree.getKillingSpreeLevel(killScore);
+		if(newSpree.ordinal() != previousSpree.ordinal())
+		{
+			//higher ordinals = worse killing sprees
+			if(newSpree.ordinal() < previousSpree.ordinal())
+			{
+				String friendlyPluralMobName = NameUtils.makeMobNamePlural(NameUtils.trimEntityNamesInString(deadEntity.getCommandSenderName()));
+				showKillingSpreeMessage(friendlyPluralMobName, true, newSpree);
+			}
 		}
 		
 		mobScores.put(entityName, killScore);
@@ -108,7 +148,7 @@ public class KillingSpreeMessager
 			//lower ordinals = better dying sprees
 			if(newSpree.ordinal() < data.currentKillingSpree.ordinal())
 			{
-				//TODO: show dying spree message
+				showKillingSpreeMessage(player.getCommandSenderName(), false, newSpree);
 			}
 			
 			data.currentKillingSpree = newSpree;
@@ -124,11 +164,10 @@ public class KillingSpreeMessager
 	private static void showKillingSpreeMessage(String entityName, boolean plural, KillingSpree newSpree)
 	{
 		StringBuilder message = new StringBuilder();
-		message.append("»§f");
+		message.append(StatCollector.translateToLocal(Names.KillingSprees.MESSAGEPREFIX));
 		message.append(entityName);
 		message.append(plural ? " are " : " is ");
-		message.append(newSpree._text);
-		message.append("!");
+		message.append(StatCollector.translateToLocal(newSpree._text));
 		
 		FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(message.toString()));
 	}

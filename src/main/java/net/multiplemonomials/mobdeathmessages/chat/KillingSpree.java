@@ -1,14 +1,16 @@
 package net.multiplemonomials.mobdeathmessages.chat;
 
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
+import net.multiplemonomials.mobdeathmessages.reference.Names;
 
 public enum KillingSpree
 {
-	NONE("on a Boring Spree"),
-	KILLINGSPREE("on a §4Killing Spree"),
-	KILLINGMACHINE("a §6Killing Machine"),
-	LEGENDARY("§bLegendary"),
-	AWESOME("§eAwesome");
+	DYINGSPREE(Names.KillingSprees.DYINGSPREE),
+	NONE(Names.KillingSprees.NONE),
+	KILLINGSPREE(Names.KillingSprees.KILLINGSPREE),
+	KILLINGMACHINE(Names.KillingSprees.KILLINGMACHINE),
+	LEGENDARY(Names.KillingSprees.LEGENDARY),
+	AWESOME(Names.KillingSprees.AWESOME);
 	
 	public final String _text;
 	
@@ -34,6 +36,10 @@ public enum KillingSpree
 		else if(numberOfKills >= ModConfiguration.killsForKillingSpree)
 		{
 			return KILLINGSPREE;
+		}
+		else if(numberOfKills <= -1 * ModConfiguration.killsForKillingSpree)
+		{
+			return DYINGSPREE;
 		}
 		return NONE;
 	}
