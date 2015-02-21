@@ -29,7 +29,10 @@ public class ModConfiguration
 	public static int killsForLegendary;
 
 	public static int killsForAwesome;
+	
+	public static boolean killingSpreePlayersVsMobsEnabled;
 
+	public static boolean killingSpreeMobsVsMobsEnabled;
 	
     private static Configuration configuration;
 
@@ -52,6 +55,10 @@ public class ModConfiguration
     	killsForKillingMachine = (2 * killsForKillingSpree) + killsForKillingSpree;
     	killsForLegendary = (4 * killsForKillingSpree) + killsForKillingMachine;
     	killsForAwesome = (8 * killsForKillingSpree) + killsForLegendary;
+    	
+    	killingSpreePlayersVsMobsEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreePlayersVsMobsEnabled", true, "Show killing sprees when mobs kill players").getBoolean();
+    	killingSpreeMobsVsMobsEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreeMobsVsMobsEnabled", true, "Show killing sprees when mobs kill mobs").getBoolean();
+
 
     	
         try

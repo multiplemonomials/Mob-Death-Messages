@@ -1,5 +1,6 @@
 package net.multiplemonomials.mobdeathmessages.handler;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,10 +25,25 @@ public class LivingDeathEventHandler
 		{
 			if(event.entity instanceof EntityPlayer)
 			{
+				//handle player death
 				if(ModConfiguration.killingSpreePlayersEnabled)
 				{
 					KillingSpreeMessager.handlePlayerDeath((EntityPlayer) event.entity);
 				}
+				
+				//handle mob kill
+				
+				if(ModConfiguration.killingSpreePlayersVsMobsEnabled && event.source instanceof EntityDamageSource)
+				{
+					EntityDamageSource entityDamageSource = (EntityDamageSource)event.source;
+					Entity sourceEntity = entityDamageSource.getEntity();
+					if(!(sourceEntity instanceof EntityPlayer))
+					{
+						KillingSpreeMessager.handleMobKill((EntityLiving) sourceEntity);
+					}
+				}
+					
+				//deal with extended player data
 				MDMPlayerData.saveProxyData((EntityPlayer) event.entity);
 			}
 			//stop bats in caves from burning to death all the time
@@ -37,18 +53,29 @@ public class LivingDeathEventHandler
 			}
 			else if(event.entityLiving instanceof EntityLiving)
 			{
-				if(ModConfiguration.killingSpreePlayersEnabled)
+				if(event.source instanceof EntityDamageSource)
 				{
-					if(event.source instanceof EntityDamageSource)
+					EntityDamageSource entitySource = (EntityDamageSource)event.source;
+					if(entitySource.getEntity() instanceof EntityPlayer)
 					{
-						EntityDamageSource entitySource = (EntityDamageSource)event.source;
-						if(entitySource.getEntity() instanceof EntityPlayer)
+						EntityPlayer attackingPlayer = (EntityPlayer)entitySource.getEntity();
+						if(ModConfiguration.killingSpreePlayersVsMobsEnabled)
 						{
-							KillingSpreeMessager.handlePlayerKill(((EntityPlayer)entitySource.getEntity()), (EntityLiving) event.entityLiving);
+							KillingSpreeMessager.handleMobDeath((EntityLiving) event.entityLiving);
 						}
+						if(ModConfiguration.killingSpreePlayersEnabled)
+						{
+							KillingSpreeMessager.handlePlayerKill(attackingPlayer, (EntityLiving) event.entityLiving);
+						}
+					}
+					else if(ModConfiguration.killingSpreeMobsVsMobsEnabled)
+					{
+						KillingSpreeMessager.handleMobKill((EntityLiving) entitySource.getEntity());
+						KillingSpreeMessager.handleMobDeath((EntityLiving) event.entityLiving);
 					}
 				}
 				EntityLivingDeathMessager.showDeathMessage(((EntityLiving)event.entityLiving), event.source);
+				
 			}
 		}
 		
