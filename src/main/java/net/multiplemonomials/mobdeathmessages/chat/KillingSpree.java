@@ -5,10 +5,10 @@ import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
 public enum KillingSpree
 {
 	NONE("on a Boring Spree"),
-	KILLINGSPREE("on a §4Killing Spree"),
-	KILLINGMACHINE("a §6Killing Machine"),
-	LEGENDARY("§bLegendary"),
-	AWESOME("§eAwesome");
+	KILLINGSPREE("on a Â§4Killing Spree"),
+	KILLINGMACHINE("a Â§6Killing Machine"),
+	LEGENDARY("Â§bLegendary"),
+	AWESOME("Â§eAwesome");
 	
 	public final String _text;
 	

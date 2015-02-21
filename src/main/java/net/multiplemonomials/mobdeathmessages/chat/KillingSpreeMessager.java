@@ -62,7 +62,6 @@ public class KillingSpreeMessager
 			{
 				//TODO: show dying spree message
 			}
-			
 			data.currentKillingSpree = newSpree;
 		}
 	}
@@ -70,7 +69,7 @@ public class KillingSpreeMessager
 	private static void showPlayerKillingSpreeMessage(String entityName, KillingSpree newSpree)
 	{
 		StringBuilder message = new StringBuilder();
-		message.append("»§f");
+		message.append("Â»Â§f");
 		message.append(entityName);
 		message.append(" is ");
 		message.append(newSpree._text);
