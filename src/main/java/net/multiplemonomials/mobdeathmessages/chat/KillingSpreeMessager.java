@@ -42,7 +42,7 @@ public class KillingSpreeMessager
 			//higher ordinals = better killing sprees
 			if(newSpree.ordinal() > data.currentKillingSpree.ordinal())
 			{
-				showKillingSpreeMessage(player.getCommandSenderName(), false, newSpree);
+				showKillingSpreeMessage(NameUtils.trimEntityNamesInString(player.getCommandSenderName()), false, newSpree);
 			}
 			
 			data.currentKillingSpree = newSpree;
@@ -56,7 +56,17 @@ public class KillingSpreeMessager
 	public static void handleMobKill(EntityLiving attackingEntity)
 	{
 		// I think this is preferred to getCommandSenderName() because it is unaffected by language files.
-		String entityName = EntityList.getEntityString(attackingEntity);
+		String entityName = null;
+		
+		try
+		{
+			entityName = EntityList.getEntityString(attackingEntity);
+		}
+		catch(NullPointerException error)
+		{
+			//some entity(s) are not in the list and will cause getEntityString() to crash
+			System.out.println("Error: could not get name of entity: " + (attackingEntity == null ? "null" : attackingEntity.getClass().getName()));
+		}
 		
 		int killScore = 0;
 		
@@ -148,7 +158,7 @@ public class KillingSpreeMessager
 			//lower ordinals = better dying sprees
 			if(newSpree.ordinal() < data.currentKillingSpree.ordinal())
 			{
-				showKillingSpreeMessage(player.getCommandSenderName(), false, newSpree);
+				showKillingSpreeMessage(NameUtils.trimEntityNamesInString(player.getCommandSenderName()), false, newSpree);
 			}
 			data.currentKillingSpree = newSpree;
 		}
@@ -166,7 +176,7 @@ public class KillingSpreeMessager
 		message.append(StatCollector.translateToLocal(Names.KillingSprees.MESSAGEPREFIX));
 		message.append(entityName);
 		message.append(plural ? " are " : " is ");
-		message.append(StatCollector.translateToLocal(newSpree._text));
+		message.append(StatCollector.translateToLocal(newSpree.getText(plural)));
 		
 		FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(message.toString()));
 	}

@@ -17,6 +17,9 @@ public class Names
     	public final static String LEGENDARY = "message.mdm.legendary";
     	public final static String AWESOME = "message.mdm.awesome";
     	
+    	//add this to the end of the above strings to get the plural versions
+    	public final static String PLURAL = "Plural";
+    	
     	public final static String MESSAGEPREFIX = "message.mdm.killingSpreeMessagePrefix";
 
     }

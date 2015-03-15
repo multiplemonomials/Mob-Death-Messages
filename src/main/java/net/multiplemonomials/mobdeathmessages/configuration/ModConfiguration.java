@@ -43,9 +43,9 @@ public class ModConfiguration
     	LogHelper.info("Loading configuration...");
     	
     	showPlayerOnMobDeathMessages = configuration.get(CATEGORY_DEATH_MESSAGES, "showPlayerOnMobDeathMessages", true, "Show cases where a mob was killed by a player").getBoolean();
-    	showMobOnMobDeathMessages = configuration.get(CATEGORY_DEATH_MESSAGES, "showMobOnMobDeathMessages", true, "Show cases where a mob was killed by a player").getBoolean();
-    	showInanimateObjectOnMobDeathMessages = configuration.get(CATEGORY_DEATH_MESSAGES, "showInanimateObjectOnMobDeathMessages", true, "Show cases where a mob was killed by a player").getBoolean();
-    	showBatsBurningToDeath = configuration.get(CATEGORY_DEATH_MESSAGES, "showBatsBurningToDeath", false, "Show cases where a mob was killed by a player").getBoolean();
+    	showMobOnMobDeathMessages = configuration.get(CATEGORY_DEATH_MESSAGES, "showMobOnMobDeathMessages", true, "Show cases where a mob was killed by a mob").getBoolean();
+    	showInanimateObjectOnMobDeathMessages = configuration.get(CATEGORY_DEATH_MESSAGES, "showInanimateObjectOnMobDeathMessages", true, "Show cases where a mob was killed by an inanimate object").getBoolean();
+    	showBatsBurningToDeath = configuration.get(CATEGORY_DEATH_MESSAGES, "showBatsBurningToDeath", false, "Show bats burning to death").getBoolean();
 
     	
     	killingSpreePlayersEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreePlayersEnabled", true, "Show player killing sprees").getBoolean();
@@ -58,8 +58,6 @@ public class ModConfiguration
     	
     	killingSpreePlayersVsMobsEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreePlayersVsMobsEnabled", true, "Show killing sprees when mobs kill players").getBoolean();
     	killingSpreeMobsVsMobsEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreeMobsVsMobsEnabled", true, "Show killing sprees when mobs kill mobs").getBoolean();
-
-
     	
         try
         {

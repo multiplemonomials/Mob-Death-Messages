@@ -63,8 +63,11 @@ public class MDMPlayerData implements IExtendedEntityProperties
 		if(compound != null)
 		{
 			NBTTagCompound masterTag = (NBTTagCompound) compound.getTag(Names.Data.MDMPLAYERDATA);
-			killScore = masterTag.getInteger("killScore");
-			currentKillingSpree = KillingSpree.getKillingSpreeLevel(killScore);
+			if(masterTag != null)
+			{
+				killScore = masterTag.getInteger("killScore");
+				currentKillingSpree = KillingSpree.getKillingSpreeLevel(killScore);
+			}
 		}
 	}
 

@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.multiplemonomials.mobdeathmessages.chat.EntityLivingDeathMessager;
 import net.multiplemonomials.mobdeathmessages.chat.KillingSpreeMessager;
@@ -23,8 +24,13 @@ public class LivingDeathEventHandler
 		Side currentEffectiveSide = FMLCommonHandler.instance().getEffectiveSide();
 		if(currentEffectiveSide == Side.SERVER)
 		{
+
 			if(event.entity instanceof EntityPlayer)
 			{
+				if(event.entity instanceof FakePlayer)
+				{
+					return;
+				}
 				//handle player death
 				if(ModConfiguration.killingSpreePlayersEnabled)
 				{
@@ -56,22 +62,26 @@ public class LivingDeathEventHandler
 				if(event.source instanceof EntityDamageSource)
 				{
 					EntityDamageSource entitySource = (EntityDamageSource)event.source;
-					if(entitySource.getEntity() instanceof EntityPlayer)
+					
+					if(entitySource.getEntity() != null)
 					{
-						EntityPlayer attackingPlayer = (EntityPlayer)entitySource.getEntity();
-						if(ModConfiguration.killingSpreePlayersVsMobsEnabled)
+						if(entitySource.getEntity() instanceof EntityPlayer)
 						{
+							EntityPlayer attackingPlayer = (EntityPlayer)entitySource.getEntity();
+							if(ModConfiguration.killingSpreePlayersVsMobsEnabled)
+							{
+								KillingSpreeMessager.handleMobDeath((EntityLiving) event.entityLiving);
+							}
+							if(ModConfiguration.killingSpreePlayersEnabled)
+							{
+								KillingSpreeMessager.handlePlayerKill(attackingPlayer, (EntityLiving) event.entityLiving);
+							}
+						}
+						else if(ModConfiguration.killingSpreeMobsVsMobsEnabled)
+						{
+							KillingSpreeMessager.handleMobKill((EntityLiving) entitySource.getEntity());
 							KillingSpreeMessager.handleMobDeath((EntityLiving) event.entityLiving);
 						}
-						if(ModConfiguration.killingSpreePlayersEnabled)
-						{
-							KillingSpreeMessager.handlePlayerKill(attackingPlayer, (EntityLiving) event.entityLiving);
-						}
-					}
-					else if(ModConfiguration.killingSpreeMobsVsMobsEnabled)
-					{
-						KillingSpreeMessager.handleMobKill((EntityLiving) entitySource.getEntity());
-						KillingSpreeMessager.handleMobDeath((EntityLiving) event.entityLiving);
 					}
 				}
 				EntityLivingDeathMessager.showDeathMessage(((EntityLiving)event.entityLiving), event.source);

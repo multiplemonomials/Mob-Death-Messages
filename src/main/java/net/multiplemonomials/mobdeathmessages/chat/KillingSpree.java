@@ -12,11 +12,20 @@ public enum KillingSpree
 	LEGENDARY(Names.KillingSprees.LEGENDARY),
 	AWESOME(Names.KillingSprees.AWESOME);
 	
-	public final String _text;
+	private final String _text;
 	
 	KillingSpree(String text)
 	{
 		_text = text;
+	}
+	
+	public String getText(boolean plural)
+	{
+		if(plural)
+		{
+			return _text + Names.KillingSprees.PLURAL;
+		}
+		return _text;
 	}
 	
 	public static KillingSpree getKillingSpreeLevel(int numberOfKills)

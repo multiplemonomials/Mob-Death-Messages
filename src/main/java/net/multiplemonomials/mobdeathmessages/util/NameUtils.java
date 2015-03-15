@@ -1,5 +1,7 @@
 package net.multiplemonomials.mobdeathmessages.util;
 
+import org.atteo.evo.inflector.English;
+
 public class NameUtils
 {
 	/**
@@ -19,18 +21,21 @@ public class NameUtils
 	
 	public static String makeMobNamePlural(String name)
 	{
-		switch(name)
-		{
-		case "Squid":
-			return "Squid";
-		case "Cassowary":
-			return "Cassowaries";
-		case "Rubber Ducky":
-			return "Rubber Duckies";
-		case "Silverfish":
-			return "Silverfish";
-		default:
-			return name + "s";
-		}
+		return English.plural(name);
+//		if(name.equals("Squid"))
+//		{
+//			return "Squid";
+//		}
+//		if(name.equals("Silverfish"))
+//		{
+//			return "Silverfish";
+//		}
+//		
+//		if(name.endsWith("y") && name.length() > 1)
+//		{
+//			return name.substring(0, name.length() - 1) + "ies";
+//		}
+//		
+//		return name + "s";
 	}
 }
