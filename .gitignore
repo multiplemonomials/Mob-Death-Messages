@@ -2,7 +2,6 @@
 /bin
 /.settings
 /.gradle
-eclipse
 /eclipse
 /logs
 /mods
@@ -15,3 +14,10 @@ eclipse
 /options.txt
 /usernamecache.json
 /screenshots
+
+#various Forge files
+/forge-*.txt
+/*-fml.txt
+/MinecraftForge-*.txt
+/README.txt
+/CREDITS-fml.txt
