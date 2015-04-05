@@ -63,7 +63,7 @@ public class LivingDeathEventHandler
 				{
 					EntityDamageSource entitySource = (EntityDamageSource)event.source;
 					
-					if(entitySource.getEntity() != null)
+					if(entitySource.getEntity() != null && entitySource.getEntity() instanceof EntityLiving)
 					{
 						if(entitySource.getEntity() instanceof EntityPlayer)
 						{
