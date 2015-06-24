@@ -52,7 +52,7 @@ public class KillingSpreeMessager
 				
 				//give the player XP
 				int expAmount = ModConfiguration.xpForKillingSpree * (1 << (newSpree.ordinal() - KillingSpree.KILLINGSPREE.ordinal()));
-				LogHelper.debug("Giving " + player.getCommandSenderName() + " " + expAmount + " xp for their " + newSpree.toString().toLowerCase());
+				LogHelper.info("Giving " + player.getCommandSenderName() + " " + expAmount + " xp for their " + newSpree.toString().toLowerCase());
 				player.addExperience(expAmount);
 			}
 			
@@ -168,7 +168,7 @@ public class KillingSpreeMessager
 		if(newSpree.ordinal() != data.currentKillingSpree.ordinal())
 		{
 			//lower ordinals = better dying sprees
-			if(newSpree.ordinal() < data.currentKillingSpree.ordinal())
+			if(newSpree.ordinal() < data.currentKillingSpree.ordinal() && newSpree != KillingSpree.NONE)
 			{
 				showKillingSpreeMessage(NameUtils.trimEntityNamesInString(player.getCommandSenderName()), false, newSpree);
 			}
