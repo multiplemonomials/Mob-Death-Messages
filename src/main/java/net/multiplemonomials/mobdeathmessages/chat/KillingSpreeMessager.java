@@ -7,9 +7,15 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
+import net.multiplemonomials.mobdeathmessages.MobDeathMessages;
+import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
 import net.multiplemonomials.mobdeathmessages.data.MDMPlayerData;
 import net.multiplemonomials.mobdeathmessages.reference.Names;
+import net.multiplemonomials.mobdeathmessages.util.LogHelper;
 import net.multiplemonomials.mobdeathmessages.util.NameUtils;
+
+import org.atteo.evo.inflector.English;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class KillingSpreeMessager
@@ -43,6 +49,11 @@ public class KillingSpreeMessager
 			if(newSpree.ordinal() > data.currentKillingSpree.ordinal())
 			{
 				showKillingSpreeMessage(NameUtils.trimEntityNamesInString(player.getCommandSenderName()), false, newSpree);
+				
+				//give the player XP
+				int expAmount = ModConfiguration.xpForKillingSpree * (1 << (newSpree.ordinal() - KillingSpree.KILLINGSPREE.ordinal()));
+				LogHelper.debug("Giving " + player.getCommandSenderName() + " " + expAmount + " xp for their " + newSpree.toString().toLowerCase());
+				player.addExperience(expAmount);
 			}
 			
 			data.currentKillingSpree = newSpree;
@@ -66,6 +77,7 @@ public class KillingSpreeMessager
 		{
 			//some entity(s) are not in the list and will cause getEntityString() to crash
 			System.out.println("Error: could not get name of entity: " + (attackingEntity == null ? "null" : attackingEntity.getClass().getName()));
+			return;
 		}
 		
 		int killScore = 0;
@@ -89,7 +101,7 @@ public class KillingSpreeMessager
 			if(newSpree.ordinal() > previousSpree.ordinal())
 			{
 	
-				String friendlyPluralMobName = NameUtils.makeMobNamePlural(NameUtils.trimEntityNamesInString(attackingEntity.getCommandSenderName()));
+				String friendlyPluralMobName = English.plural(NameUtils.trimEntityNamesInString(attackingEntity.getCommandSenderName()));
 				showKillingSpreeMessage(friendlyPluralMobName, true, newSpree);
 			}
 			
@@ -127,7 +139,7 @@ public class KillingSpreeMessager
 			//higher ordinals = worse killing sprees
 			if(newSpree.ordinal() < previousSpree.ordinal())
 			{
-				String friendlyPluralMobName = NameUtils.makeMobNamePlural(NameUtils.trimEntityNamesInString(deadEntity.getCommandSenderName()));
+				String friendlyPluralMobName = English.plural(NameUtils.trimEntityNamesInString(deadEntity.getCommandSenderName()));
 				showKillingSpreeMessage(friendlyPluralMobName, true, newSpree);
 			}
 		}
@@ -175,6 +187,7 @@ public class KillingSpreeMessager
 		StringBuilder message = new StringBuilder();
 		message.append(StatCollector.translateToLocal(Names.KillingSprees.MESSAGEPREFIX));
 		message.append(entityName);
+		message.append(MobDeathMessages.SECTION_SIGN + 'f'); //"escape" color codes in mob names
 		message.append(plural ? " are " : " is ");
 		message.append(StatCollector.translateToLocal(newSpree.getText(plural)));
 		

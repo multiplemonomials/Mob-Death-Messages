@@ -12,47 +12,74 @@ import cpw.mods.fml.common.FMLCommonHandler;
 
 public class EntityLivingDeathMessager 
 {
-	
-	
-	public static void showDeathMessage(EntityLiving entityLiving, DamageSource damageSource)
+	/**
+	 * Return whether a message should be shown for the dead mob based on the circumstances of death
+	 * and the configuration of the mod
+	 * @param deadEntity
+	 * @param damageSource
+	 * @return
+	 */
+	private static boolean shouldShowMessage(EntityLiving deadEntity, DamageSource damageSource)
 	{
+		boolean retval = false;
 		
-		//return if the damage source is disabled in config
-		if(damageSource instanceof EntityDamageSource)
+		//if we're only supposed to show messages involving named mobs, that gets priority
+		if(ModConfiguration.showNamedMobsOnly)
 		{
-			EntityDamageSource entitySource = (EntityDamageSource)damageSource;
-			if(entitySource.getEntity() instanceof EntityPlayer)
+			if(ModConfiguration.showMobOnMobDeathMessages)
 			{
-				if(!ModConfiguration.showPlayerOnMobDeathMessages)
+				//check attacker
+				if(damageSource instanceof EntityDamageSource)
 				{
-					return;
+					EntityDamageSource entitySource = (EntityDamageSource)damageSource;
+					retval = entitySource.getEntity() instanceof EntityLiving && ((EntityLiving)entitySource.getEntity()).hasCustomNameTag();
 				}
 			}
-			else
+			
+			//check attackee
+			if(!retval)
 			{
-				if(!ModConfiguration.showMobOnMobDeathMessages)
-				{
-					return;
-				}
+				retval = deadEntity.hasCustomNameTag();
 			}
 		}
 		else
 		{
-			if(!ModConfiguration.showInanimateObjectOnMobDeathMessages)
+			
+			if(damageSource instanceof EntityDamageSource)
 			{
-				return;
+				EntityDamageSource entitySource = (EntityDamageSource)damageSource;
+				if(entitySource.getEntity() instanceof EntityPlayer)
+				{
+					retval = ModConfiguration.showPlayerOnMobDeathMessages;
+				}
+				else
+				{
+					retval = ModConfiguration.showMobOnMobDeathMessages;
+				}
+			}
+			else
+			{
+				retval = ModConfiguration.showInanimateObjectOnMobDeathMessages;
 			}
 		}
 		
-		//                                         getCombatTracker().getDeathMessage()
-		IChatComponent deathMessage = entityLiving.func_110142_aN().func_151521_b();
-		
-		String messageText = deathMessage.getUnformattedText();
-		
-		//try to fix entities that aren't named properly in the death message
-		messageText = NameUtils.trimEntityNamesInString(messageText);
-
-		
-		FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(messageText));
+		return retval;
+	}
+	
+	public static void showDeathMessage(EntityLiving deadEntity, DamageSource damageSource)
+	{
+		if(shouldShowMessage(deadEntity, damageSource))
+		{
+			//                                         getCombatTracker().getDeathMessage()
+			IChatComponent deathMessage = deadEntity.func_110142_aN().func_151521_b();
+			
+			String messageText = deathMessage.getUnformattedText();
+			
+			//try to fix entities that aren't named properly in the death message
+			messageText = NameUtils.trimEntityNamesInString(messageText);
+	
+			
+			FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(messageText));
+		}
 	}
 }

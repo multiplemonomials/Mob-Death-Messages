@@ -22,6 +22,11 @@ public class MobDeathMessages
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
+    
+    //used for color codes
+    //can't be reliably embedded into source code because javac and Eclipse don't
+    //necessarily use the same character encoding on windows
+    public static final String SECTION_SIGN = "\u00A7";
 
     @EventHandler
     public void invalidFingerprint(FMLFingerprintViolationEvent event)

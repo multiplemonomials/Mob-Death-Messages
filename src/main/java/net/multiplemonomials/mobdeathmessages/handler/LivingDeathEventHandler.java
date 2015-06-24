@@ -63,9 +63,11 @@ public class LivingDeathEventHandler
 				{
 					EntityDamageSource entitySource = (EntityDamageSource)event.source;
 					
-					if(entitySource.getEntity() != null && entitySource.getEntity() instanceof EntityLiving)
+					Entity source = entitySource.getEntity();
+					
+					if(source != null)
 					{
-						if(entitySource.getEntity() instanceof EntityPlayer)
+						if(source instanceof EntityPlayer)
 						{
 							EntityPlayer attackingPlayer = (EntityPlayer)entitySource.getEntity();
 							if(ModConfiguration.killingSpreePlayersVsMobsEnabled)
@@ -77,7 +79,7 @@ public class LivingDeathEventHandler
 								KillingSpreeMessager.handlePlayerKill(attackingPlayer, (EntityLiving) event.entityLiving);
 							}
 						}
-						else if(ModConfiguration.killingSpreeMobsVsMobsEnabled)
+						else if(source instanceof EntityLiving && ModConfiguration.killingSpreeMobsVsMobsEnabled)
 						{
 							KillingSpreeMessager.handleMobKill((EntityLiving) entitySource.getEntity());
 							KillingSpreeMessager.handleMobDeath((EntityLiving) event.entityLiving);
