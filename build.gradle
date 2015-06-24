@@ -34,9 +34,9 @@ dependencies {
 
 //package dependencies in jar
 //found at https://github.com/MinecraftForge/ForgeGradle/wiki/Dependencies
-jar {
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-}
+//jar {
+//    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+//}
 
 processResources
 {
