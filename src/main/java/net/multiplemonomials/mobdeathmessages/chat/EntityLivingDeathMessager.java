@@ -78,6 +78,11 @@ public class EntityLivingDeathMessager
 			//try to fix entities that aren't named properly in the death message
 			messageText = NameUtils.trimEntityNamesInString(messageText);
 	
+			//stop this silliness
+			if(messageText.equals("Squid drowned"))
+			{
+				messageText = "Squid asphyxiated";
+			}
 			
 			FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(messageText));
 		}
