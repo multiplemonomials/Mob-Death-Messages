@@ -18,7 +18,7 @@ public class ModConfiguration
 	
 	public static boolean showNamedMobsOnly;
 	
-	public static boolean showBatsBurningToDeath;
+	public static boolean showBatsDyingOfNaturalCauses;
 		
 	public static final String CATEGORY_KILLING_SPREES = "Killing Spree Options";
 	
@@ -54,7 +54,7 @@ public class ModConfiguration
         	showMobOnMobDeathMessages = configuration.get(CATEGORY_DEATH_MESSAGES, "showMobOnMobDeathMessages", true, "Show cases where a mob was killed by a mob").getBoolean();
         	showNamedMobsOnly = configuration.get(CATEGORY_DEATH_MESSAGES, "showNamedMobsOnly", false, "Only show death messages involving mobs which have a custom name. If MobvMob messages are enabled, the named mob can be the attacker as well.").getBoolean();
         	showInanimateObjectOnMobDeathMessages = configuration.get(CATEGORY_DEATH_MESSAGES, "showInanimateObjectOnMobDeathMessages", true, "Show cases where a mob was killed by an inanimate object").getBoolean();
-        	showBatsBurningToDeath = configuration.get(CATEGORY_DEATH_MESSAGES, "showBatsBurningToDeath", false, "Show bats burning to death").getBoolean();
+        	showBatsDyingOfNaturalCauses = configuration.get(CATEGORY_DEATH_MESSAGES, "showBatsDyingOfNaturalCauses", false, "Show bats being killed by their environment.  Prevents spam caused by them dying in caves to lava or Oreberry bushes.").getBoolean();
 
         	xpForKillingSpree = configuration.get(CATEGORY_KILLING_SPREES, "xpForKillingSpree", 10, "Amount of XP awarded to players who get a killing spree.  Each subsequent level of spree gets twice as much xp.  Set to 0 to disable.").getInt();
         	killingSpreePlayersEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreePlayersEnabled", true, "Show player killing sprees").getBoolean();

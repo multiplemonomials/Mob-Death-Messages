@@ -2,7 +2,6 @@ package net.multiplemonomials.mobdeathmessages.handler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.common.util.FakePlayer;
@@ -51,11 +50,6 @@ public class LivingDeathEventHandler
 					
 				//deal with extended player data
 				MDMPlayerData.saveProxyData((EntityPlayer) event.entity);
-			}
-			//stop bats in caves from burning to death all the time
-			else if((!ModConfiguration.showBatsBurningToDeath) && (event.entityLiving instanceof EntityBat && event.source.isFireDamage()))
-			{
-				event.setCanceled(true);
 			}
 			else if(event.entityLiving instanceof EntityLiving)
 			{

@@ -66,11 +66,11 @@ public class KillingSpreeMessager
 	 */
 	public static void handleMobKill(EntityLiving attackingEntity)
 	{
-		// I think this is preferred to getCommandSenderName() because it is unaffected by language files.
 		String entityName = null;
 		
 		try
 		{
+			// I think this is preferred to getCommandSenderName() because it is unaffected by language files.
 			entityName = EntityList.getEntityString(attackingEntity);
 		}
 		catch(NullPointerException error)

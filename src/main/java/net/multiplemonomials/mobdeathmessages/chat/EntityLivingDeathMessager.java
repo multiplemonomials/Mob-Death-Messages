@@ -1,6 +1,7 @@
 package net.multiplemonomials.mobdeathmessages.chat;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
@@ -59,7 +60,14 @@ public class EntityLivingDeathMessager
 			}
 			else
 			{
-				retval = ModConfiguration.showInanimateObjectOnMobDeathMessages;
+				if(!ModConfiguration.showBatsDyingOfNaturalCauses && deadEntity instanceof EntityBat)
+				{
+					retval = false;
+				}
+				else
+				{
+					retval = ModConfiguration.showInanimateObjectOnMobDeathMessages;
+				}
 			}
 		}
 		
@@ -82,6 +90,11 @@ public class EntityLivingDeathMessager
 			if(messageText.equals("Squid drowned"))
 			{
 				messageText = "Squid asphyxiated";
+			}
+			
+			if(messageText.equals("Blaze drowned"))
+			{
+				messageText = "Blaze tried to swim in water";
 			}
 			
 			FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(messageText));
