@@ -6,8 +6,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import net.multiplemonomials.mobdeathmessages.MobDeathMessages;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
 import net.multiplemonomials.mobdeathmessages.data.MDMPlayerData;
 import net.multiplemonomials.mobdeathmessages.reference.Names;
@@ -187,7 +187,7 @@ public class KillingSpreeMessager
 		StringBuilder message = new StringBuilder();
 		message.append(StatCollector.translateToLocal(Names.KillingSprees.MESSAGEPREFIX));
 		message.append(entityName);
-		message.append(MobDeathMessages.SECTION_SIGN + 'f'); //"escape" color codes in mob names
+		message.append(EnumChatFormatting.WHITE.toString()); //"escape" color codes in mob names
 		message.append(plural ? " are " : " is ");
 		message.append(StatCollector.translateToLocal(newSpree.getText(plural)));
 		
