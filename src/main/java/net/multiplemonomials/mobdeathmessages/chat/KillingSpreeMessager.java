@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
 import net.multiplemonomials.mobdeathmessages.data.MDMPlayerData;
 import net.multiplemonomials.mobdeathmessages.reference.Names;
@@ -15,8 +16,6 @@ import net.multiplemonomials.mobdeathmessages.util.LogHelper;
 import net.multiplemonomials.mobdeathmessages.util.NameUtils;
 
 import org.atteo.evo.inflector.English;
-
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public class KillingSpreeMessager
 {
@@ -48,11 +47,11 @@ public class KillingSpreeMessager
 			//higher ordinals = better killing sprees
 			if(newSpree.ordinal() > data.currentKillingSpree.ordinal())
 			{
-				showKillingSpreeMessage(NameUtils.trimEntityNamesInString(player.getCommandSenderName()), false, newSpree);
+				showKillingSpreeMessage(NameUtils.trimEntityNamesInString(player.getName()), false, newSpree);
 				
 				//give the player XP
 				int expAmount = ModConfiguration.xpForKillingSpree * (1 << (newSpree.ordinal() - KillingSpree.KILLINGSPREE.ordinal()));
-				LogHelper.info("Giving " + player.getCommandSenderName() + " " + expAmount + " xp for their " + newSpree.toString().toLowerCase());
+				LogHelper.info("Giving " + player.getName() + " " + expAmount + " xp for their " + newSpree.toString().toLowerCase());
 				player.addExperience(expAmount);
 			}
 			
@@ -101,7 +100,7 @@ public class KillingSpreeMessager
 			if(newSpree.ordinal() > previousSpree.ordinal())
 			{
 	
-				String friendlyPluralMobName = English.plural(NameUtils.trimEntityNamesInString(attackingEntity.getCommandSenderName()));
+				String friendlyPluralMobName = English.plural(NameUtils.trimEntityNamesInString(attackingEntity.getName()));
 				showKillingSpreeMessage(friendlyPluralMobName, true, newSpree);
 			}
 			
@@ -139,7 +138,7 @@ public class KillingSpreeMessager
 			//higher ordinals = worse killing sprees
 			if(newSpree.ordinal() < previousSpree.ordinal())
 			{
-				String friendlyPluralMobName = English.plural(NameUtils.trimEntityNamesInString(deadEntity.getCommandSenderName()));
+				String friendlyPluralMobName = English.plural(NameUtils.trimEntityNamesInString(deadEntity.getName()));
 				showKillingSpreeMessage(friendlyPluralMobName, true, newSpree);
 			}
 		}
@@ -170,7 +169,7 @@ public class KillingSpreeMessager
 			//lower ordinals = better dying sprees
 			if(newSpree.ordinal() < data.currentKillingSpree.ordinal() && newSpree != KillingSpree.NONE)
 			{
-				showKillingSpreeMessage(NameUtils.trimEntityNamesInString(player.getCommandSenderName()), false, newSpree);
+				showKillingSpreeMessage(NameUtils.trimEntityNamesInString(player.getName()), false, newSpree);
 			}
 			data.currentKillingSpree = newSpree;
 		}

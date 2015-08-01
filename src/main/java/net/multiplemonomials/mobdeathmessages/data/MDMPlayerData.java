@@ -2,14 +2,10 @@ package net.multiplemonomials.mobdeathmessages.data;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.multiplemonomials.mobdeathmessages.chat.KillingSpree;
-import net.multiplemonomials.mobdeathmessages.network.PacketHandler;
-import net.multiplemonomials.mobdeathmessages.network.message.MessageMBMPlayerDataUpdateClient;
-import net.multiplemonomials.mobdeathmessages.network.message.MessageMBMPlayerDataUpdateServer;
 import net.multiplemonomials.mobdeathmessages.proxy.CommonProxy;
 import net.multiplemonomials.mobdeathmessages.reference.Names;
 
@@ -75,7 +71,7 @@ public class MDMPlayerData implements IExtendedEntityProperties
     private static final String getSaveKey(EntityPlayer player)
     {
     	// no longer a username field, so use the command sender name instead:
-    	return player.getCommandSenderName() + ":" + Names.Data.MDMPLAYERDATA;
+    	return player.getName() + ":" + Names.Data.MDMPLAYERDATA;
     }
     
     public static final void loadProxyData(EntityPlayer player)
@@ -102,14 +98,7 @@ public class MDMPlayerData implements IExtendedEntityProperties
     
     public static void syncExtendedPlayer(EntityPlayer player, MDMPlayerData playerData)
     {
-    	if(!player.worldObj.isRemote)
-    	{
-    		PacketHandler.INSTANCE.sendTo(new MessageMBMPlayerDataUpdateClient(playerData), (EntityPlayerMP)player);
-    	}
-    	else
-    	{
-    		PacketHandler.INSTANCE.sendToServer(new MessageMBMPlayerDataUpdateServer(playerData));
-    	}
+    	//do nothing, since the player data only needs to live on the server.
     }
 
 	@Override

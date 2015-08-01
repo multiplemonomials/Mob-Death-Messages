@@ -10,9 +10,9 @@ import net.multiplemonomials.mobdeathmessages.chat.EntityLivingDeathMessager;
 import net.multiplemonomials.mobdeathmessages.chat.KillingSpreeMessager;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
 import net.multiplemonomials.mobdeathmessages.data.MDMPlayerData;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class LivingDeathEventHandler
 {

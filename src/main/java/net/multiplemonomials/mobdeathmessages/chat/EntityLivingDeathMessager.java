@@ -7,9 +7,9 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
 import net.multiplemonomials.mobdeathmessages.util.NameUtils;
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public class EntityLivingDeathMessager 
 {
@@ -33,14 +33,14 @@ public class EntityLivingDeathMessager
 				if(damageSource instanceof EntityDamageSource)
 				{
 					EntityDamageSource entitySource = (EntityDamageSource)damageSource;
-					retval = entitySource.getEntity() instanceof EntityLiving && ((EntityLiving)entitySource.getEntity()).hasCustomNameTag();
+					retval = entitySource.getEntity() instanceof EntityLiving && ((EntityLiving)entitySource.getEntity()).hasCustomName();
 				}
 			}
 			
 			//check attackee
 			if(!retval)
 			{
-				retval = deadEntity.hasCustomNameTag();
+				retval = deadEntity.hasCustomName();
 			}
 		}
 		else
@@ -78,8 +78,8 @@ public class EntityLivingDeathMessager
 	{
 		if(shouldShowMessage(deadEntity, damageSource))
 		{
-			//                                         getCombatTracker().getDeathMessage()
-			IChatComponent deathMessage = deadEntity.func_110142_aN().func_151521_b();
+			//                                                          getDeathMessage()
+			IChatComponent deathMessage = deadEntity.getCombatTracker().func_151521_b();
 			
 			String messageText = deathMessage.getUnformattedText();
 			

@@ -65,8 +65,8 @@ public class ModConfiguration
         	killsForLegendary = (4 * killsForKillingSpree) + killsForKillingMachine;
         	killsForAwesome = (8 * killsForKillingSpree) + killsForLegendary;
         	
-        	killingSpreePlayersVsMobsEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreePlayersVsMobsEnabled", true, "Show killing sprees when mobs kill players").getBoolean();
-        	killingSpreeMobsVsMobsEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreeMobsVsMobsEnabled", true, "Show killing sprees when mobs kill mobs").getBoolean();
+        	killingSpreePlayersVsMobsEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreePlayersVsMobsEnabled", true, "Mobs get killing sprees when they kill players.").getBoolean();
+        	killingSpreeMobsVsMobsEnabled = configuration.get(CATEGORY_KILLING_SPREES, "killingSpreeMobsVsMobsEnabled", true, "Mobs get killing sprees when they kill other mobs.").getBoolean();
         }
         catch (Exception e)
         {

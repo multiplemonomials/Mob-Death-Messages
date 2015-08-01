@@ -1,10 +1,9 @@
 package net.multiplemonomials.mobdeathmessages.util;
 
+import net.minecraftforge.fml.common.FMLLog;
 import net.multiplemonomials.mobdeathmessages.reference.Reference;
 
 import org.apache.logging.log4j.Level;
-
-import cpw.mods.fml.common.FMLLog;
 
 public class LogHelper
 {
