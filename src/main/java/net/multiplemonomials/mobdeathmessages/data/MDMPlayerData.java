@@ -2,13 +2,11 @@ package net.multiplemonomials.mobdeathmessages.data;
 
 import java.util.concurrent.Callable;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.multiplemonomials.mobdeathmessages.chat.KillingSpree;
-import net.multiplemonomials.mobdeathmessages.reference.Names;
 
 
 //http://www.minecraftforum.net/forums/mapping-and-modding/mapping-and-modding-tutorials/1571567-1-7-2-1-6-4-eventhandler-and
@@ -45,13 +43,6 @@ public class MDMPlayerData implements IMDMPlayerData
 		this.currentKillingSpree = currentKillingSpree;
 	}
 
-	private static final String getSaveKey(EntityPlayer player)
-    {
-    	// no longer a username field, so use the command sender name instead:
-    	return player.getName() + ":" + Names.Data.MDMPLAYERDATA;
-    }
-    
-    
 	/**
 	 * Handles loading and saving MDM player data
 	 * @author jamie
