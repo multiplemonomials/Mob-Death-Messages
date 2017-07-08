@@ -2,17 +2,15 @@ package net.multiplemonomials.mobdeathmessages.handler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.multiplemonomials.mobdeathmessages.chat.EntityLivingDeathMessager;
 import net.multiplemonomials.mobdeathmessages.chat.KillingSpreeMessager;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
-import net.multiplemonomials.mobdeathmessages.data.MDMPlayerData;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class LivingDeathEventHandler
 {
@@ -20,27 +18,28 @@ public class LivingDeathEventHandler
 	@SubscribeEvent
 	public void onLivingDeathEvent(LivingDeathEvent event)
 	{
-		Side currentEffectiveSide = FMLCommonHandler.instance().getEffectiveSide();
-		if(currentEffectiveSide == Side.SERVER)
+		EntityLivingBase entity = event.getEntityLiving();
+		
+		if(entity.isServerWorld())
 		{
 
-			if(event.entity instanceof EntityPlayer)
+			if(entity instanceof EntityPlayer)
 			{
-				if(event.entity instanceof FakePlayer)
+				if(entity instanceof FakePlayer)
 				{
 					return;
 				}
 				//handle player death
 				if(ModConfiguration.killingSpreePlayersEnabled)
 				{
-					KillingSpreeMessager.handlePlayerDeath((EntityPlayer) event.entity);
+					KillingSpreeMessager.handlePlayerDeath((EntityPlayer) entity);
 				}
 				
 				//handle mob kill
 				
-				if(ModConfiguration.killingSpreePlayersVsMobsEnabled && event.source instanceof EntityDamageSource)
+				if(ModConfiguration.killingSpreePlayersVsMobsEnabled && event.getSource() instanceof EntityDamageSource)
 				{
-					EntityDamageSource entityDamageSource = (EntityDamageSource)event.source;
+					EntityDamageSource entityDamageSource = (EntityDamageSource)event.getSource();
 					Entity sourceEntity = entityDamageSource.getEntity();
 					if(!(sourceEntity instanceof EntityPlayer))
 					{
@@ -48,14 +47,12 @@ public class LivingDeathEventHandler
 					}
 				}
 					
-				//deal with extended player data
-				MDMPlayerData.saveProxyData((EntityPlayer) event.entity);
 			}
-			else if(event.entityLiving instanceof EntityLiving)
+			else if(entity instanceof EntityLiving)
 			{
-				if(event.source instanceof EntityDamageSource)
+				if(event.getSource() instanceof EntityDamageSource)
 				{
-					EntityDamageSource entitySource = (EntityDamageSource)event.source;
+					EntityDamageSource entitySource = (EntityDamageSource)event.getSource();
 					
 					Entity source = entitySource.getEntity();
 					
@@ -66,21 +63,21 @@ public class LivingDeathEventHandler
 							EntityPlayer attackingPlayer = (EntityPlayer)entitySource.getEntity();
 							if(ModConfiguration.killingSpreePlayersVsMobsEnabled)
 							{
-								KillingSpreeMessager.handleMobDeath((EntityLiving) event.entityLiving);
+								KillingSpreeMessager.handleMobDeath((EntityLiving) entity);
 							}
 							if(ModConfiguration.killingSpreePlayersEnabled)
 							{
-								KillingSpreeMessager.handlePlayerKill(attackingPlayer, (EntityLiving) event.entityLiving);
+								KillingSpreeMessager.handlePlayerKill(attackingPlayer, (EntityLiving) entity);
 							}
 						}
 						else if(source instanceof EntityLiving && ModConfiguration.killingSpreeMobsVsMobsEnabled)
 						{
 							KillingSpreeMessager.handleMobKill((EntityLiving) entitySource.getEntity());
-							KillingSpreeMessager.handleMobDeath((EntityLiving) event.entityLiving);
+							KillingSpreeMessager.handleMobDeath((EntityLiving) entity);
 						}
 					}
 				}
-				EntityLivingDeathMessager.showDeathMessage(((EntityLiving)event.entityLiving), event.source);
+				EntityLivingDeathMessager.showDeathMessage(((EntityLiving)entity), event.getSource());
 				
 			}
 		}

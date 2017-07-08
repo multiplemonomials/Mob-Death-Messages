@@ -1,10 +1,12 @@
 package net.multiplemonomials.mobdeathmessages.reference;
 
+import net.minecraft.util.ResourceLocation;
+
 public class Names
 {
     public static class Data
     {
-    	public final static String MDMPLAYERDATA = "MDMPlayerData";
+    	public final static ResourceLocation MDMPLAYERDATA = new ResourceLocation(Reference.MOD_NAME, "MDMPlayerData");
     }
     
     

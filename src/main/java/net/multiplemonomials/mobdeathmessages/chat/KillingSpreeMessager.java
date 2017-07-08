@@ -2,26 +2,28 @@ package net.multiplemonomials.mobdeathmessages.chat;
 
 import java.util.HashMap;
 
-import net.minecraft.entity.EntityList;
+import org.atteo.evo.inflector.English;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.multiplemonomials.mobdeathmessages.MobDeathMessages;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
-import net.multiplemonomials.mobdeathmessages.data.MDMPlayerData;
+import net.multiplemonomials.mobdeathmessages.data.IMDMPlayerData;
 import net.multiplemonomials.mobdeathmessages.reference.Names;
 import net.multiplemonomials.mobdeathmessages.util.LogHelper;
 import net.multiplemonomials.mobdeathmessages.util.NameUtils;
-
-import org.atteo.evo.inflector.English;
 
 public class KillingSpreeMessager
 {
 	
 	/**
-	 * HashMap to keep track of how many kills types of mob have gotten
+	 * HashMap of entity class names and kill scores to keep track of how many kills types of mob have gotten
 	 */
 	public static HashMap<String, Integer> mobScores = new HashMap<String, Integer>();
 	
@@ -32,20 +34,21 @@ public class KillingSpreeMessager
 	 */
 	public static void handlePlayerKill(EntityPlayer player, EntityLiving deadEntity)
 	{
-		MDMPlayerData data = MDMPlayerData.get(player);
-		if(data.killScore < 0)
+		IMDMPlayerData data = player.getCapability(MobDeathMessages.MDM_DATA_CAPABILITY, null);
+		
+		if(data.getKillScore() < 0)
 		{
 			//reset dying spree
-			data.killScore = 0;
+			data.setKillScore(0);
 		}		
 		
-		++data.killScore;
+		data.setKillScore(data.getKillScore() + 1);
 		
-		KillingSpree newSpree = KillingSpree.getKillingSpreeLevel(data.killScore);
-		if(newSpree.ordinal() != data.currentKillingSpree.ordinal())
+		KillingSpree newSpree = KillingSpree.getKillingSpreeLevel(data.getKillScore());
+		if(newSpree.ordinal() != data.getCurrentKillingSpree().ordinal())
 		{
 			//higher ordinals = better killing sprees
-			if(newSpree.ordinal() > data.currentKillingSpree.ordinal())
+			if(newSpree.ordinal() > data.getCurrentKillingSpree().ordinal())
 			{
 				showKillingSpreeMessage(NameUtils.trimEntityNamesInString(player.getName()), false, newSpree);
 				
@@ -55,7 +58,7 @@ public class KillingSpreeMessager
 				player.addExperience(expAmount);
 			}
 			
-			data.currentKillingSpree = newSpree;
+			data.setCurrentKillingSpree(newSpree);
 		}
 	}
 	
@@ -65,25 +68,13 @@ public class KillingSpreeMessager
 	 */
 	public static void handleMobKill(EntityLiving attackingEntity)
 	{
-		String entityName = null;
-		
-		try
-		{
-			// I think this is preferred to getCommandSenderName() because it is unaffected by language files.
-			entityName = EntityList.getEntityString(attackingEntity);
-		}
-		catch(NullPointerException error)
-		{
-			//some entity(s) are not in the list and will cause getEntityString() to crash
-			System.out.println("Error: could not get name of entity: " + (attackingEntity == null ? "null" : attackingEntity.getClass().getName()));
-			return;
-		}
+		String entityClass = attackingEntity.getClass().getSimpleName();
 		
 		int killScore = 0;
 		
-		if(mobScores.containsKey(entityName))
+		if(mobScores.containsKey(entityClass))
 		{
-			killScore = mobScores.get(entityName);
+			killScore = mobScores.get(entityClass);
 		}
 		if(killScore < 0)
 		{
@@ -100,13 +91,13 @@ public class KillingSpreeMessager
 			if(newSpree.ordinal() > previousSpree.ordinal())
 			{
 	
-				String friendlyPluralMobName = English.plural(NameUtils.trimEntityNamesInString(attackingEntity.getName()));
+				String friendlyPluralMobName = English.plural(NameUtils.getEntityNameForDisplay(attackingEntity));
 				showKillingSpreeMessage(friendlyPluralMobName, true, newSpree);
 			}
 			
 		}
 		
-		mobScores.put(entityName, killScore);
+		mobScores.put(entityClass, killScore);
 	}
 	
 	/**
@@ -115,14 +106,13 @@ public class KillingSpreeMessager
 	 */
 	public static void handleMobDeath(EntityLiving deadEntity)
 	{
-		// I think this is preferred to getCommandSenderName() because it is unaffected by language files.
-		String entityName = EntityList.getEntityString(deadEntity);
+		String entityString = deadEntity.getClass().getSimpleName();
 		
 		int killScore = 0;
 		
-		if(mobScores.containsKey(entityName))
+		if(mobScores.containsKey(entityString))
 		{
-			killScore = mobScores.get(entityName);
+			killScore = mobScores.get(entityString);
 		}
 		if(killScore > 0)
 		{
@@ -138,12 +128,12 @@ public class KillingSpreeMessager
 			//higher ordinals = worse killing sprees
 			if(newSpree.ordinal() < previousSpree.ordinal())
 			{
-				String friendlyPluralMobName = English.plural(NameUtils.trimEntityNamesInString(deadEntity.getName()));
+				String friendlyPluralMobName = English.plural(NameUtils.getEntityNameForDisplay(deadEntity));
 				showKillingSpreeMessage(friendlyPluralMobName, true, newSpree);
 			}
 		}
 		
-		mobScores.put(entityName, killScore);
+		mobScores.put(entityString, killScore);
 	}
 	
 	/**
@@ -152,26 +142,26 @@ public class KillingSpreeMessager
 	 */
 	public static void handlePlayerDeath(EntityPlayer player)
 	{
-		MDMPlayerData data = MDMPlayerData.get(player);
-		if(data.killScore > 0)
+		IMDMPlayerData data = player.getCapability(MobDeathMessages.MDM_DATA_CAPABILITY, null);
+		if(data.getKillScore() > 0)
 		{
 			//reset dying spree
-			data.killScore = 0;
+			data.setKillScore(0);
 		}
 		else
 		{
-			--data.killScore;
+			data.setKillScore(data.getKillScore() - 1);
 		}
 		
-		KillingSpree newSpree = KillingSpree.getKillingSpreeLevel(data.killScore);
-		if(newSpree.ordinal() != data.currentKillingSpree.ordinal())
+		KillingSpree newSpree = KillingSpree.getKillingSpreeLevel(data.getKillScore());
+		if(newSpree.ordinal() != data.getCurrentKillingSpree().ordinal())
 		{
 			//lower ordinals = better dying sprees
-			if(newSpree.ordinal() < data.currentKillingSpree.ordinal() && newSpree != KillingSpree.NONE)
+			if(newSpree.ordinal() < data.getCurrentKillingSpree().ordinal() && newSpree != KillingSpree.NONE)
 			{
 				showKillingSpreeMessage(NameUtils.trimEntityNamesInString(player.getName()), false, newSpree);
 			}
-			data.currentKillingSpree = newSpree;
+			data.setCurrentKillingSpree(newSpree);
 		}
 	}
 
@@ -181,15 +171,19 @@ public class KillingSpreeMessager
 	 * @param plural Whether or not the entityName is plural.
 	 * @param newSpree
 	 */
+	@SuppressWarnings("deprecation") // we actually DON'T want to use TextComponentTranslation for this because the mod isn't installed on the client so the language files won't exist
 	private static void showKillingSpreeMessage(String entityName, boolean plural, KillingSpree newSpree)
 	{
-		StringBuilder message = new StringBuilder();
-		message.append(StatCollector.translateToLocal(Names.KillingSprees.MESSAGEPREFIX));
-		message.append(entityName);
-		message.append(EnumChatFormatting.WHITE.toString()); //"escape" color codes in mob names
-		message.append(plural ? " are " : " is ");
-		message.append(StatCollector.translateToLocal(newSpree.getText(plural)));
+		ITextComponent message = new TextComponentString(I18n.translateToLocal(Names.KillingSprees.MESSAGEPREFIX));
+		message.appendText(entityName);
 		
-		FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(message.toString()));
+		ITextComponent mobName = new TextComponentString(entityName);
+		//"escape" color codes in mob names
+		mobName.setStyle(new Style().setColor(TextFormatting.WHITE));
+		
+		message.appendText(plural ? " are " : " is ");
+		message.appendSibling(new TextComponentString(I18n.translateToLocal(newSpree.getText(plural))));
+		
+		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(message);
 	}
 }

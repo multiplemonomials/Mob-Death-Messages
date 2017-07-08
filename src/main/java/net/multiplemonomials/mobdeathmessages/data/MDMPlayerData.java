@@ -1,110 +1,119 @@
 package net.multiplemonomials.mobdeathmessages.data;
 
-import net.minecraft.entity.Entity;
+import java.util.concurrent.Callable;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
 import net.multiplemonomials.mobdeathmessages.chat.KillingSpree;
-import net.multiplemonomials.mobdeathmessages.proxy.CommonProxy;
 import net.multiplemonomials.mobdeathmessages.reference.Names;
 
 
 //http://www.minecraftforum.net/forums/mapping-and-modding/mapping-and-modding-tutorials/1571567-1-7-2-1-6-4-eventhandler-and
 //coolAlias thank you so much
 
-public class MDMPlayerData implements IExtendedEntityProperties
+public class MDMPlayerData implements IMDMPlayerData
 {	
-	private final EntityPlayer player;
-	
-    public EntityPlayer getBoundPlayer() 
-    {
-		return player;
-	}
-
-    public int killScore;
+	public int killScore;
     public KillingSpree currentKillingSpree;
 	    
-    public MDMPlayerData(EntityPlayer player)
+    /*package-private*/ MDMPlayerData()
     {
-	    this.player = player;	
 	    killScore = 0;
 	    currentKillingSpree = KillingSpree.NONE;
     }
-
-    public static final MDMPlayerData get(EntityPlayer player)
-    {
-    	return (MDMPlayerData) player.getExtendedProperties(Names.Data.MDMPLAYERDATA);
-    }
     
-    public static final void register(EntityPlayer player)
-    {
-    	player.registerExtendedProperties(Names.Data.MDMPLAYERDATA, new MDMPlayerData(player));
-    }
-
-	@Override
-	public void saveNBTData(NBTTagCompound compound)
+    public int getKillScore()
 	{
-		NBTTagCompound masterTag = new NBTTagCompound();
-		masterTag.setInteger("killScore", killScore);
-
-		compound.setTag(Names.Data.MDMPLAYERDATA, masterTag);
+		return killScore;
 	}
 
-	@Override
-	public void loadNBTData(NBTTagCompound compound) 
+	public KillingSpree getCurrentKillingSpree()
 	{
-		// read the known items from NBT
-		
-		if(compound != null)
-		{
-			NBTTagCompound masterTag = (NBTTagCompound) compound.getTag(Names.Data.MDMPLAYERDATA);
-			if(masterTag != null)
-			{
-				killScore = masterTag.getInteger("killScore");
-				currentKillingSpree = KillingSpree.getKillingSpreeLevel(killScore);
-			}
-		}
+		return currentKillingSpree;
 	}
 
-    
-    private static final String getSaveKey(EntityPlayer player)
+	public void setKillScore(int killScore)
+	{
+		this.killScore = killScore;
+	}
+
+	public void setCurrentKillingSpree(KillingSpree currentKillingSpree)
+	{
+		this.currentKillingSpree = currentKillingSpree;
+	}
+
+	private static final String getSaveKey(EntityPlayer player)
     {
     	// no longer a username field, so use the command sender name instead:
     	return player.getName() + ":" + Names.Data.MDMPLAYERDATA;
     }
     
-    public static final void loadProxyData(EntityPlayer player)
-    {
-    	MDMPlayerData playerData = MDMPlayerData.get(player);
-    	NBTTagCompound savedData = CommonProxy.getEntityData(getSaveKey(player));
-    	if (savedData != null)
-    	{
-    		playerData.loadNBTData(savedData);
-    	}
-    	
-    	syncExtendedPlayer(player, playerData);
-    }
     
-    public static void saveProxyData(EntityPlayer player)
-    {
-    	MDMPlayerData playerData = MDMPlayerData.get(player);
-    	NBTTagCompound savedData = new NBTTagCompound();
-
-    	playerData.saveNBTData(savedData);
-
-    	CommonProxy.storeEntityData(getSaveKey(player), savedData);
-    }
-    
-    public static void syncExtendedPlayer(EntityPlayer player, MDMPlayerData playerData)
-    {
-    	//do nothing, since the player data only needs to live on the server.
-    }
-
-	@Override
-	public void init(Entity entity, World world)
-	{
+	/**
+	 * Handles loading and saving MDM player data
+	 * @author jamie
+	 *
+	 */
+	public static class Storage implements Capability.IStorage<IMDMPlayerData> {
+	
+		// overloads to eliminate extra parameters
 		
+		public NBTTagCompound writeNBT(IMDMPlayerData instance)
+		{
+			NBTTagCompound masterTag = new NBTTagCompound();
+			masterTag.setInteger("mdmKillScore", instance.getKillScore());
+			return masterTag;	
+		}
+		
+		public void readNBT(IMDMPlayerData instance, NBTBase nbt) 
+		{
+			// read the known items from NBT
+			if(nbt != null)
+			{
+				NBTTagCompound masterTag = ((NBTTagCompound)nbt);
+				if(masterTag.hasKey("mdmKillScore"))
+				{
+					instance.setKillScore(masterTag.getInteger("mdmKillScore"));
+					instance.setCurrentKillingSpree(KillingSpree.getKillingSpreeLevel(instance.getKillScore()));
+				}
+			}
+		}
+		
+		// actual Forge-signature functions
+		
+		@Override
+		public NBTBase writeNBT(Capability<IMDMPlayerData> capability, IMDMPlayerData instance, EnumFacing side)
+		{
+			return writeNBT(instance);
+		}
+		
+		@Override
+		public void readNBT(Capability<IMDMPlayerData> capability, IMDMPlayerData instance, EnumFacing side, NBTBase nbt) 
+		{
+			readNBT(instance, nbt);
+		}
 	}
-
+	
+	// we really only need one instance of Storage
+	private static Storage storageInstance = null;
+	public static Storage getStorageInstance()
+	{
+		if(storageInstance == null)
+		{
+			storageInstance = new Storage();
+		}
+		
+		return storageInstance;
+	}
+	
+	public static class Factory implements Callable<MDMPlayerData>
+	{
+		  @Override
+		  public MDMPlayerData call() throws Exception {
+		    return new MDMPlayerData();
+		  }
+	}
 }

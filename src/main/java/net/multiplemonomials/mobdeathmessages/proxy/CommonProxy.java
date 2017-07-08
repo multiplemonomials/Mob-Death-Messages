@@ -7,8 +7,8 @@ import java.util.Map;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
-import net.multiplemonomials.mobdeathmessages.handler.EntityConstructedEventHandler;
-import net.multiplemonomials.mobdeathmessages.handler.EntityJoinWorldHandler;
+import net.multiplemonomials.mobdeathmessages.handler.AttachCapabilitiesEventHandler;
+import net.multiplemonomials.mobdeathmessages.handler.PlayerCloneEventHandler;
 import net.multiplemonomials.mobdeathmessages.handler.LivingDeathEventHandler;
 
 public abstract class CommonProxy implements IProxy
@@ -19,8 +19,8 @@ public abstract class CommonProxy implements IProxy
     public void registerEventHandlers()
     {
         
-        MinecraftForge.EVENT_BUS.register(new EntityConstructedEventHandler());
-        MinecraftForge.EVENT_BUS.register(new EntityJoinWorldHandler());
+        MinecraftForge.EVENT_BUS.register(new AttachCapabilitiesEventHandler());
+        MinecraftForge.EVENT_BUS.register(new PlayerCloneEventHandler());
         MinecraftForge.EVENT_BUS.register(new LivingDeathEventHandler());
 
     }

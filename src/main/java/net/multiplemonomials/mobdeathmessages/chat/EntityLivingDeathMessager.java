@@ -3,10 +3,10 @@ package net.multiplemonomials.mobdeathmessages.chat;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
 import net.multiplemonomials.mobdeathmessages.util.NameUtils;
@@ -78,13 +78,13 @@ public class EntityLivingDeathMessager
 	{
 		if(shouldShowMessage(deadEntity, damageSource))
 		{
-			//                                                          getDeathMessage()
-			IChatComponent deathMessage = deadEntity.getCombatTracker().func_151521_b();
+			ITextComponent deathMessage = deadEntity.getCombatTracker().getDeathMessage();
 			
 			String messageText = deathMessage.getUnformattedText();
 			
 			//try to fix entities that aren't named properly in the death message
 			messageText = NameUtils.trimEntityNamesInString(messageText);
+			
 	
 			//stop this silliness
 			if(messageText.equals("Squid drowned"))
@@ -97,7 +97,7 @@ public class EntityLivingDeathMessager
 				messageText = "Blaze tried to swim in water";
 			}
 			
-			FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(messageText));
+			FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentString(messageText));
 		}
 	}
 }
