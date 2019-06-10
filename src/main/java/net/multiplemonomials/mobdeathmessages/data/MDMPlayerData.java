@@ -42,6 +42,12 @@ public class MDMPlayerData implements IMDMPlayerData
 	{
 		this.currentKillingSpree = currentKillingSpree;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "MDMPlayerData: killscore=" + killScore + " , currentKillingSpree=" + currentKillingSpree.toString();
+	}
 
 	/**
 	 * Handles loading and saving MDM player data

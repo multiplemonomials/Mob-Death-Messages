@@ -97,7 +97,7 @@ public class EntityLivingDeathMessager
 				messageText = "Blaze tried to swim in water";
 			}
 			
-			FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentString(messageText));
+			FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(new TextComponentString(messageText));
 		}
 	}
 }

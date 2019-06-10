@@ -35,7 +35,7 @@ public class KillingSpreeMessager
 	public static void handlePlayerKill(EntityPlayer player, EntityLiving deadEntity)
 	{
 		IMDMPlayerData data = player.getCapability(MobDeathMessages.MDM_DATA_CAPABILITY, null);
-		
+				
 		if(data.getKillScore() < 0)
 		{
 			//reset dying spree
@@ -184,6 +184,6 @@ public class KillingSpreeMessager
 		message.appendText(plural ? " are " : " is ");
 		message.appendSibling(new TextComponentString(I18n.translateToLocal(newSpree.getText(plural))));
 		
-		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(message);
+		FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(message);
 	}
 }

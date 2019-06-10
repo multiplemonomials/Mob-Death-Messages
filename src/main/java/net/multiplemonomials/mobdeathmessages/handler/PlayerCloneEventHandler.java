@@ -11,7 +11,7 @@ public class PlayerCloneEventHandler
 	@SubscribeEvent
 	public void onEntityJoinWorld(PlayerEvent.Clone event)
 	{
-		if(!event.getEntityPlayer().worldObj.isRemote && event.isWasDeath())
+		if(!event.getEntityPlayer().world.isRemote && event.isWasDeath())
 		{
 			NBTTagCompound mdmData = MDMPlayerData.getStorageInstance().writeNBT(event.getOriginal().getCapability(MobDeathMessages.MDM_DATA_CAPABILITY, null));
 			MDMPlayerData.getStorageInstance().readNBT(event.getEntityPlayer().getCapability(MobDeathMessages.MDM_DATA_CAPABILITY, null), mdmData);
