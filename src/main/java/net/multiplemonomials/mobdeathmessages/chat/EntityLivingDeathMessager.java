@@ -33,7 +33,7 @@ public class EntityLivingDeathMessager
 				if(damageSource instanceof EntityDamageSource)
 				{
 					EntityDamageSource entitySource = (EntityDamageSource)damageSource;
-					retval = entitySource.getEntity() instanceof EntityLiving && ((EntityLiving)entitySource.getEntity()).hasCustomName();
+					retval = entitySource.getTrueSource() instanceof EntityLiving && ((EntityLiving)entitySource.getTrueSource()).hasCustomName();
 				}
 			}
 			
@@ -49,7 +49,7 @@ public class EntityLivingDeathMessager
 			if(damageSource instanceof EntityDamageSource)
 			{
 				EntityDamageSource entitySource = (EntityDamageSource)damageSource;
-				if(entitySource.getEntity() instanceof EntityPlayer)
+				if(entitySource.getTrueSource() instanceof EntityPlayer)
 				{
 					retval = ModConfiguration.showPlayerOnMobDeathMessages;
 				}
