@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -41,10 +42,26 @@ public class LivingDeathEventHandler
 				{
 					EntityDamageSource entityDamageSource = (EntityDamageSource)event.getSource();
 					Entity sourceEntity = entityDamageSource.getTrueSource();
-					if(!(sourceEntity instanceof EntityPlayer))
+					
+					
+					// Despite what the trueSource() documentation says, 
+					// sometimes the source entity is not an EntityLiving and we have to do extra work.
+					if(sourceEntity instanceof EntityArrow)
+					{
+						EntityArrow arrow = (EntityArrow)sourceEntity;
+						sourceEntity = arrow.shootingEntity;
+					}
+					
+					
+					if(sourceEntity instanceof EntityPlayer)
+					{
+						KillingSpreeMessager.handlePlayerKill((EntityPlayer)sourceEntity, entity);
+					}
+					else if(sourceEntity instanceof EntityLiving)
 					{
 						KillingSpreeMessager.handleMobKill((EntityLiving) sourceEntity);
 					}
+					
 				}
 					
 			}

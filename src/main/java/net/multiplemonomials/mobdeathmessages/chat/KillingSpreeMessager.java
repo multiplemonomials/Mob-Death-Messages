@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.atteo.evo.inflector.English;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
@@ -32,7 +33,7 @@ public class KillingSpreeMessager
 	 * @param player
 	 * @param EntityLiving the thing they killed
 	 */
-	public static void handlePlayerKill(EntityPlayer player, EntityLiving deadEntity)
+	public static void handlePlayerKill(EntityPlayer player, EntityLivingBase deadEntity)
 	{
 		IMDMPlayerData data = player.getCapability(MobDeathMessages.MDM_DATA_CAPABILITY, null);
 				
