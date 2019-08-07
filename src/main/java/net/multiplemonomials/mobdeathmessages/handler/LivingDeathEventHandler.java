@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.multiplemonomials.mobdeathmessages.chat.EntityLivingDeathMessager;
 import net.multiplemonomials.mobdeathmessages.chat.KillingSpreeMessager;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;

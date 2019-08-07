@@ -2,12 +2,46 @@ package net.multiplemonomials.mobdeathmessages.configuration;
 
 import java.io.File;
 
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.multiplemonomials.mobdeathmessages.reference.Reference;
 import net.multiplemonomials.mobdeathmessages.util.LogHelper;
 
 public class ModConfiguration
 {
+	public static class DeathMessages
+	{
+		public final ForgeConfigSpec.BooleanValue showPlayerOnMobDeathMessages;
+
+		public final ForgeConfigSpec.BooleanValue showMobOnMobDeathMessages;
+
+		public final ForgeConfigSpec.BooleanValue showInanimateObjectOnMobDeathMessages;
+
+		public final ForgeConfigSpec.BooleanValue showNamedMobsOnly;
+
+		public DeathMessages(ForgeConfigSpec.Builder builder)
+		{
+			builder.push("Death Messages");
+			
+			showPlayerOnMobDeathMessages = builder
+					.comment("Show cases where a mob was killed by a player.")
+					.define("showPlayerOnMobDeathMessages", true);
+			
+			showMobOnMobDeathMessages = builder
+					.comment("Show cases where a mob was killed by a mob.")
+					.define("showMobOnMobDeathMessages", true);
+			
+			showInanimateObjectOnMobDeathMessages = builder
+					.comment("Show cases where a mob was killed by an inanimate object.")
+					.define("showInanimateObjectOnMobDeathMessages", true);
+			
+			showNamedMobsOnly = builder
+					.comment("Only show death messages involving mobs which have a custom name. If MobvMob messages are enabled, the named mob can be the attacker as well.")
+					.define("showNamedMobsOnly", false);
+			
+			builder.pop();
+		}
+	}
+	
 	public static final String CATEGORY_DEATH_MESSAGES = "Death Message Options";
 	
 	public static boolean showPlayerOnMobDeathMessages;

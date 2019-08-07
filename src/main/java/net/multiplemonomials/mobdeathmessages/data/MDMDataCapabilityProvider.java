@@ -1,9 +1,14 @@
 package net.multiplemonomials.mobdeathmessages.data;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.NonNullSupplier;
 import net.multiplemonomials.mobdeathmessages.MobDeathMessages;
 
 public class MDMDataCapabilityProvider implements ICapabilitySerializable<NBTTagCompound>
@@ -12,17 +17,19 @@ public class MDMDataCapabilityProvider implements ICapabilitySerializable<NBTTag
 	private final MDMPlayerData data = new MDMPlayerData();
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing)
+	public @Nonnull <T> LazyOptional<T> getCapability(@Nonnull final Capability<T> cap, final @Nullable EnumFacing side)
 	{
-		return capability == MobDeathMessages.MDM_DATA_CAPABILITY;
-	}
-
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing)
-	{
-		if(capability == MobDeathMessages.MDM_DATA_CAPABILITY)
+		if(cap == MobDeathMessages.MDM_DATA_CAPABILITY)
 		{
-			return MobDeathMessages.MDM_DATA_CAPABILITY.<T>cast(data);
+			return LazyOptional.<T>of(new NonNullSupplier<T>()
+			{
+				@SuppressWarnings("unchecked")
+				@Override
+				public T get()
+				{
+					return (T) data;
+				}
+			});
 		}
 		
 		return null;

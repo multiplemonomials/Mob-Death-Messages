@@ -1,15 +1,18 @@
 package net.multiplemonomials.mobdeathmessages.util;
 
-import net.minecraftforge.fml.common.FMLLog;
-import net.multiplemonomials.mobdeathmessages.reference.Reference;
-
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import net.multiplemonomials.mobdeathmessages.reference.Reference;
 
 public class LogHelper
 {
+	private static Logger logger = LogManager.getLogger(Reference.MOD_ID);
+	
     public static void log(Level logLevel, Object object)
     {
-        FMLLog.log(Reference.MOD_NAME, logLevel, String.valueOf(object));
+    	logger.log(logLevel, String.valueOf(object));
     }
 
     public static void all(Object object)

@@ -4,34 +4,24 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.multiplemonomials.mobdeathmessages.data.IMDMPlayerData;
 import net.multiplemonomials.mobdeathmessages.data.MDMPlayerData;
-import net.multiplemonomials.mobdeathmessages.network.PacketHandler;
-import net.multiplemonomials.mobdeathmessages.proxy.IProxy;
 import net.multiplemonomials.mobdeathmessages.reference.Reference;
 import net.multiplemonomials.mobdeathmessages.util.LogHelper;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, acceptableRemoteVersions = "*")
+@Mod(value = Reference.MOD_ID)
 public class MobDeathMessages
 {
-    @Instance(Reference.MOD_ID)
     public static MobDeathMessages instance;
 
-    @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
-    public static IProxy proxy;
 
 	@CapabilityInject(IMDMPlayerData.class)
 	public static Capability<IMDMPlayerData> MDM_DATA_CAPABILITY = null;
 
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event)
+    public void preInit(FMLCommonSetupEvent event)
     {
         LogHelper.info("Phase 1 Loading Started");
         

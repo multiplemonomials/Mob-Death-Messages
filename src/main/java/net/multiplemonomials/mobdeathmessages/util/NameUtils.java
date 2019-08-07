@@ -22,7 +22,7 @@ public class NameUtils
 
 	public static String getEntityNameForDisplay(EntityLiving entity)
 	{
-		String name = trimEntityNamesInString(entity.getName());
+		String name = trimEntityNamesInString(entity.getName().getFormattedText());
 		
 		// for some reason, calling getName() on a Zombie Pigman returns "Zombie"
 		if(name.equals("Zombie") || entity instanceof EntityPigZombie)

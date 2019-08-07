@@ -2,7 +2,7 @@ package net.multiplemonomials.mobdeathmessages.data;
 
 import java.util.concurrent.Callable;
 
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -61,11 +61,11 @@ public class MDMPlayerData implements IMDMPlayerData
 		public NBTTagCompound writeNBT(IMDMPlayerData instance)
 		{
 			NBTTagCompound masterTag = new NBTTagCompound();
-			masterTag.setInteger("mdmKillScore", instance.getKillScore());
+			masterTag.setInt("mdmKillScore", instance.getKillScore());
 			return masterTag;	
 		}
 		
-		public void readNBT(IMDMPlayerData instance, NBTBase nbt) 
+		public void readNBT(IMDMPlayerData instance, INBTBase nbt) 
 		{
 			// read the known items from NBT
 			if(nbt != null)
@@ -73,7 +73,7 @@ public class MDMPlayerData implements IMDMPlayerData
 				NBTTagCompound masterTag = ((NBTTagCompound)nbt);
 				if(masterTag.hasKey("mdmKillScore"))
 				{
-					instance.setKillScore(masterTag.getInteger("mdmKillScore"));
+					instance.setKillScore(masterTag.getInt("mdmKillScore"));
 					instance.setCurrentKillingSpree(KillingSpree.getKillingSpreeLevel(instance.getKillScore()));
 				}
 			}
@@ -82,13 +82,13 @@ public class MDMPlayerData implements IMDMPlayerData
 		// actual Forge-signature functions
 		
 		@Override
-		public NBTBase writeNBT(Capability<IMDMPlayerData> capability, IMDMPlayerData instance, EnumFacing side)
+		public INBTBase writeNBT(Capability<IMDMPlayerData> capability, IMDMPlayerData instance, EnumFacing side)
 		{
 			return writeNBT(instance);
 		}
 		
 		@Override
-		public void readNBT(Capability<IMDMPlayerData> capability, IMDMPlayerData instance, EnumFacing side, NBTBase nbt) 
+		public void readNBT(Capability<IMDMPlayerData> capability, IMDMPlayerData instance, EnumFacing side, INBTBase nbt) 
 		{
 			readNBT(instance, nbt);
 		}

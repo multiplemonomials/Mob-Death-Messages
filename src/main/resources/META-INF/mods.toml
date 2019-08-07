@@ -1,0 +1,30 @@
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
+modLoader="javafml" #mandatory
+
+# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
+loaderVersion="[25,)" #mandatory (24 is current forge version)
+
+# A URL to refer people to when problems occur with this mod
+issueTrackerURL="https://github.com/multiplemonomials/Mob-Death-Messages/issues"
+
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]] #mandatory
+# The modid of the mod
+modId="mobdeathmessages" #mandatory
+
+# The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
+version="${file.jarVersion}" #mandatory
+
+ # A display name for the mod
+displayName="Mob Death Messages" #mandatory
+
+# A URL for the "homepage" for this mod, displayed in the mod UI
+displayURL="https://minecraft.curseforge.com/projects/mob-death-messages" #optional
+
+# A text field displayed in the mod UI
+authors="A look at the mobs' perspective on your killing sprees." #optional
+
+# The description text for the mod (multi line!) (#mandatory)
+description='''
+Mob Death Messages shows death messages for mobs, and announces the killing spress of players and mobs.
+'''

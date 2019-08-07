@@ -3,11 +3,11 @@ package net.multiplemonomials.mobdeathmessages.chat;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.multiplemonomials.mobdeathmessages.configuration.ModConfiguration;
 import net.multiplemonomials.mobdeathmessages.util.NameUtils;
 
@@ -80,7 +80,7 @@ public class EntityLivingDeathMessager
 		{
 			ITextComponent deathMessage = deadEntity.getCombatTracker().getDeathMessage();
 			
-			String messageText = deathMessage.getUnformattedText();
+			String messageText = deathMessage.getUnformattedComponentText();
 			
 			//try to fix entities that aren't named properly in the death message
 			messageText = NameUtils.trimEntityNamesInString(messageText);
@@ -97,7 +97,13 @@ public class EntityLivingDeathMessager
 				messageText = "Blaze tried to swim in water";
 			}
 			
-			FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(new TextComponentString(messageText));
+			
+			MinecraftServer server = deadEntity.world.getServer();
+			
+			if(server != null)
+			{
+				server.getPlayerList().sendMessage(new TextComponentString(messageText));
+			}
 		}
 	}
 }
